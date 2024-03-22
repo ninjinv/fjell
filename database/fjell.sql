@@ -47,6 +47,25 @@ CREATE TABLE IF NOT EXISTS `fjell`.`problem` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- lage databasebrukere
+-- -----------------------------------------------------
+
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE USER 'kunde'@'localhost' IDENTIFIED BY 'kunde321';
+GRANT SELECT, INSERT ON *.* TO 'kunde'@'localhost';
+FLUSH PRIVILEGES;
+
+-- -----------------------------------------------------
+-- test insert
+-- -----------------------------------------------------
+
+INSERT INTO bruker (brukernavn, passord, admin) VALUES ('test1', 'test2', 0);
+INSERT INTO bruker (brukernavn, passord, admin) VALUES ('pass1', 'pass2', 1);
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
