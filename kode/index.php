@@ -14,13 +14,15 @@
 
 <p>Vennligst logg inn:</p>
 <form method="post" action="login.php">
-    <label for="brukernavn">E-post_</label>
-    <input type="text" name="brukernavn" /><br />
-    <label for="passord">Passord:</label>
-    <input type="password" name="passord" /><br />
+    <label for="epost">E-post</label>
+    <input type="text" name="epost" /><br />
+    <label for="pwd">Passord:</label>
+    <input type="password" name="pwd" /><br />
 
     <input type="submit" value="Logg inn" name="submit" />
 </form>
-<p>Eller klikk <a href="registrering.php">her</a> for å registrere ny bruker</p>
+
+<p>Eller klikk <a href="regpg.php">her</a> for å registrere ny bruker</p>
+
 </body>
 </html>

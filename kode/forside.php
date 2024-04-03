@@ -6,6 +6,21 @@
 </head>
 <body>
 
+<!-- lage ny henvendelse -->
+<div>
+
+    <div>
+        
+    </div>
+
+</div>
+
+
+<!-- status side -->
+<div>
+
+</div>
+
 
     
 </body>

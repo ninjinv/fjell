@@ -1,47 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sjekk pålogging</title>
-</head>
-<body>
-    <?php
-        if(isset($_POST['submit'])){
-            //Gjøre om POST-data til variabler
-            $brukernavn = $_POST['brukernavn'];
-            $passord = (hash("sha512", $_POST['passord']));
-            
-            //Koble til databasen
-            $dbc = mysqli_connect('localhost', 'root', 'Test', 'mydb')
-              or die('Error connecting to MySQL server.');
-            
-            //Gjøre klar SQL-strengen
-            $query = "SELECT username, password, vote from users where username='$brukernavn' and password='$passord' and vote='$vote'";
-            // "INSERT INTO users VALUES ('$brukernavn', 'passord')";
+<?php
+ 
+// dont close php code in pure php file
+// can cause issues
 
-            //Utføre spørringen
-            $result = mysqli_query($dbc, $query)
-              or die('Error querying database.');
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $epost = $_POST['epost'];
+    $pwd = (hash("sha512", $_POST['pwd']));
+
+
+    try {
+        require_once "db_connection_kunde.php";
+
+        // check if epost exist
+        $query = "SELECT * FROM bruker WHERE epost = :epost;";
+        $stmt = $pdo -> prepare($query);
+        $stmt -> bindParam(':epost', $epost);
+        $stmt -> execute();
+        $result = $stmt ->fetch(PDO::FETCH_ASSOC);
+        
+        
+        if ($result == true){
+        
+        $stmt = $pdo->prepare("SELECT epost FROM bruker WHERE epost = :epost AND passord = :pwd;");
+        $stmt->bindParam(":epost", $epost);
+        $stmt->bindParam(":pwd", $pwd);
+        $user_id = $pdo -> lastinsertid(); // User id
+        $stmt->execute();
+        
+
+    
+        } else {
+            header( "refresh:0; url=index.php" );
             
-            //Koble fra databasen
-            mysqli_close($dbc);
+            echo '<script>User doesn`t exist :(</script>';
+                die("");
+        } 
+             $pdo = null;
+                $stmt = null;  
+                $_SESSION["epost"] = $_POST["epost"];      
+                header( "refresh:0; url=forside.php" );
+                echo '<script> alert("Sign in suckurmom");</script>';
+                die("");
+    } catch(PDOException $e) {
+        echo "Noe gikk galt, prøv igjen! Feilmelding: " . $e->getMessage();
+    }
+    
+}
 
-            //Sjekke om spørringen gir resultater
-            if($result->num_rows > 0){
-                // Start a session
-                session_start();
-                // Store user information in the session
-                $_SESSION['username'] = $brukernavn;
-                $_SESSION['vote'] = $vote;
-                // Redirect to a welcome page or dashboard
-                header('location: welcome.php');
-            } else {
-                // Invalid login
-                header('location: index.html');
-            }
-
-        }
-    ?>
-</body>
-</html>
+              
