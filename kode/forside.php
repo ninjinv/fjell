@@ -10,7 +10,7 @@
 <div>
 
     <div>
-        
+        <a href="problempg.php"></a>
     </div>
 
 </div>
@@ -18,6 +18,9 @@
 
 <!-- status side -->
 <div>
+    <div>
+        <a href="status_kundepg.php"></a>
+    </div>
 
 </div>
 
