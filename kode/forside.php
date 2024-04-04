@@ -18,6 +18,7 @@
 
 <!-- status side -->
 <div>
+    
     <div>
         <a href="status_kundepg.php"></a>
     </div>
