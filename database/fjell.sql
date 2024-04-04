@@ -19,10 +19,10 @@ USE `fjell` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `fjell`.`bruker` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `brukernavn` VARCHAR(45) NOT NULL,
-  `passord` LONGTEXT NOT NULL,
+  `kallenavn` VARCHAR(15) NOT NULL,
   `epost` VARCHAR(45) NOT NULL,
-  `admin` VARCHAR(45) NOT NULL,
+  `passord` LONGTEXT NOT NULL,
+  `admin` VARCHAR(45) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `fjell`.`problem` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `tittel` VARCHAR(45) NOT NULL,
   `problem` LONGTEXT NOT NULL,
+  `kategori` VARCHAR(45) NULL,
   `status` VARCHAR(45) NOT NULL DEFAULT 0,
   `losning` VARCHAR(220) NULL,
   `tid` TIMESTAMP NOT NULL,
@@ -46,25 +47,6 @@ CREATE TABLE IF NOT EXISTS `fjell`.`problem` (
     ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- lage databasebrukere
--- -----------------------------------------------------
-
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
-FLUSH PRIVILEGES;
-
-CREATE USER 'kunde'@'localhost' IDENTIFIED BY 'kunde321';
-GRANT SELECT, INSERT ON *.* TO 'kunde'@'localhost';
-FLUSH PRIVILEGES;
-
--- -----------------------------------------------------
--- test insert
--- -----------------------------------------------------
-
-INSERT INTO bruker (brukernavn, passord, admin) VALUES ('test1', 'test2', 0);
-INSERT INTO bruker (brukernavn, passord, admin) VALUES ('pass1', 'pass2', 1);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

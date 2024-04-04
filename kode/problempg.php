@@ -17,7 +17,7 @@
         <input type="text" name="kallenavn" required /><br />
 
         <label for="beskrivelse">Beskrivelse av problemet:</label>
-        <input type="text" name="beskrivelse" required size="50"/><br />
+        <input type="text" name="beskrivelse" required rows="2" cols="25"/><br />
 
         <select name="kategori" id="kategori">
         <option value="faktura">Faktura</option>
