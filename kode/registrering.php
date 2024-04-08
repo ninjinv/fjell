@@ -28,19 +28,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $stmt->bindParam(':pwd', $pwd);
             $user_id = $pdo -> lastinsertid(); // User id
             $stmt->execute();
+
+            // alerrt hvis det gikk
+            echo '<script>alert("Registrering vellykket!");</script>';
+
+            // go login
+            header("refresh:0; url=login.php");
+            exit();
+
         } else {
             $pdo = null;
-                $stmt = null; 
-            header("refresh:0; url=./registrering.php");
-            echo 'Epost allerede registrert!';
-                die("");
-        }
-
-                $pdo = null;
-                $stmt = null;        
-                header( "refresh:0; url=index.php" );
-                echo '<script> alert("Sign up sucsess");</script>';
-                die("");
+            $stmt = null; 
+            echo '<script>alert("Eposten er allerede tatt!");</script>';
+            exit();
+        }                
             
     } catch(PDOException $e) {
         echo "Noe gikk galt, prøv igjen! Feilmelding: " . $e->getMessage();
@@ -48,5 +49,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     // Disconnect from the database
     $pdo = null;
+    $stmt = null; 
 }
 

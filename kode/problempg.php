@@ -12,7 +12,7 @@
     
 <div>
     <p>Skriv inn problem:</p>
-    <form method="post">
+    <form action="problem.php" method="post">
         <label for="kallenavn">Tittel:</label>
         <input type="text" name="kallenavn" required /><br />
 
