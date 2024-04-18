@@ -3,8 +3,8 @@
 $dsn = "mysql:host=localhost;
         dbname=fjell";
 
-$dbusername = "root";
-$dbpassword = "Test";
+$dbusername = "admin";
+$dbpassword = "admin123";
 
 
 try {
