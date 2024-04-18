@@ -33,7 +33,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             echo '<script>alert("Registrering vellykket!");</script>';
 
             // go login
-            header("refresh:0; url=login.php");
+            header("refresh:0; url=loginpg.php");
             exit();
 
         } else {

@@ -1,14 +1,15 @@
 <?php
-$servername = "localhost";
-$username = "admin";
-$password = "admin123";
-$database = "fjell";
+// placeholder names and hwavre
+$dsn = "mysql:host=localhost;
+        dbname=fjell";
+
+$dbusername = "root";
+$dbpassword = "Test";
 
 
-$conn_admin = new mysqli($servername, $username, $password, $database);
-
-// Sjekker tilkoblingen
-if ($conn_admin->connect_error) {
-    die("Tilkoblingsfeil: " . $conn_admin->connect_error);
+try {
+    $pdo = new PDO($dsn, $dbusername, $dbpassword);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "connection failed: " . $e->getMessage();
 }
-

@@ -1,41 +1,64 @@
 <?php
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sjekker om brukeren er logget inn
-    if (!isset($_SESSION['epost'])) {
-        header("Location: login.php");
-        exit();
-    }
-
-    // Henter skjemadata og sanitiserer det
-    $tittel = $_POST['tittel'];
-    $problem = $_POST['problem'];
-    $kategori = $_POST['kategori'];
-
-    // Legger til databaseforbindelsen
-    require_once "db_connection_kunde.php";
-
-    try {
-        // Forbereder SQL-spørringen for å sette inn problemet
-        $stmt = $pdo->prepare("INSERT INTO problem (tittel, problem, kategori, bruker_id) VALUES (:tittel, :problem, :kategori, :bruker_id)");
-        $stmt->bindParam(':tittel', $tittel);
-        $stmt->bindParam(':problem', $problem);
-        $stmt->bindParam(':kategori', $kategori);
-        $stmt->bindParam(':bruker_id', $_SESSION['bruker_id']);
-        
-        // Utfører SQL-spørringen
-        $stmt->execute();
-
-        // Lukker databaseforbindelsen
-        $pdo = null;
-        $stmt = null;
-
-        // Omdirigerer til en side etter vellykket innsending av problem
-        header("Location: dashboard.php");
-        exit();
-    } catch(PDOException $e) {
-        echo "Noe gikk galt, prøv igjen! Feilmelding: " . $e->getMessage();
-    }
+if (isset($_SESSION["id"])) {
+    // Brukeren er innlogget
+    $user_id = $_SESSION["id"];
+    
+} else {
+    // Brukeren er ikke innlogget, omdiriger til innloggingssiden
+    header("Location: loginpg.php");
+    exit;
 }
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $tittel = $_POST['tittel'] ?? '';
+    $problem = $_POST['problem'] ?? '';
+    $kategori = $_POST['kategori'] ?? '';
+    $status = 0;
+    $losning = '';
+    $bruker_id = $user_id; // Bruker den hentede bruker-IDen
+    $id_kategori = $_POST['kategori'] ?? ''; // Bruker kategori som ble sendt fra skjema
+
+    if ($tittel && $problem && $kategori && $bruker_id && $id_kategori) {
+        require_once "db_connection_kunde.php";
+        try {
+            $sql = "INSERT INTO problem (tittel, problem, kategori, status, losning, bruker_id, kategori_id_kategori) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(1, $tittel);
+            $stmt->bindParam(2, $problem);
+            $stmt->bindParam(3, $kategori);
+            $stmt->bindParam(4, $status);
+            $stmt->bindParam(5, $losning);
+            $stmt->bindParam(6, $bruker_id);
+            $stmt->bindParam(7, $id_kategori);
+            if ($stmt->execute()) {
+                echo '<script>alert("Vellykket, problemet ditt er sendt inn"); window.location.href = "forside.php";</script>;</script>';
+            } else {
+                echo "Feil";
+            }
+            $stmt->closeCursor();
+        } catch (PDOException $e) {
+            echo "Noe gikk galt, prøv igjen! Feilmelding: " . $e->getMessage();
+        }
+    } else {
+        echo "Manglende informasjon. Følgende felt mangler: ";
+        if (empty($tittel)) {
+            echo "Tittel ";
+        }
+        if (empty($problem)) {
+            echo "Problem ";
+        }
+        if (empty($kategori)) {
+            echo "Kategori ";
+        }
+        if (empty($bruker_id)) {
+            echo "Bruker ID ";
+        }
+        if (empty($id_kategori)) {
+            echo "Kategori ID ";
+        }
+    }
+} else {
+    echo "Feil metode. Vennligst bruk POST-metoden for å sende data.";
+}
