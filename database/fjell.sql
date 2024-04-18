@@ -28,6 +28,16 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `fjell`.`kategori`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `fjell`.`kategori` (
+  `id_kategori` INT NOT NULL,
+  `navn` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_kategori`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `fjell`.`problem`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `fjell`.`problem` (
@@ -37,13 +47,20 @@ CREATE TABLE IF NOT EXISTS `fjell`.`problem` (
   `kategori` VARCHAR(45) NULL,
   `status` VARCHAR(45) NOT NULL DEFAULT 0,
   `losning` VARCHAR(220) NULL,
-  `tid` TIMESTAMP NOT NULL,
+  `tid` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `bruker_id` INT NULL,
+  `kategori_id_kategori` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_problem_bruker_idx` (`bruker_id` ASC),
+  INDEX `fk_problem_kategori1_idx` (`kategori_id_kategori` ASC),
   CONSTRAINT `fk_problem_bruker`
     FOREIGN KEY (`bruker_id`)
     REFERENCES `fjell`.`bruker` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_problem_kategori1`
+    FOREIGN KEY (`kategori_id_kategori`)
+    REFERENCES `fjell`.`kategori` (`id_kategori`)
     ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
